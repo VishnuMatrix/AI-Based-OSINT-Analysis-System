@@ -42,12 +42,15 @@ function App() {
   // -----------------------------
   // FETCH DATA
   // -----------------------------
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const fetchNews = async () => {
     setLoading(true);
 
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/news?query=${query}`);
+      const res = await axios.get(
+        `${API_URL}/news?query=${encodeURIComponent(query)}`,
+      );
 
       setNews(res.data.articles);
       setSummary(res.data.summary);
@@ -59,9 +62,9 @@ function App() {
       setRiskExplanation(res.data.risk_explanation);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   // 🔥 NEW FUNCTION (IMAGE ANALYSIS)
